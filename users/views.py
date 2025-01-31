@@ -1,32 +1,41 @@
 from django.contrib.auth.views import LoginView as AuthLoginView
+from django.contrib.auth.models import User
 from django.contrib.auth import login
-from django.views.generic.edit import FormView
-from django.shortcuts import redirect
-from django.contrib import messages
-from .forms import UserRegistrationForm
+from django.views import View
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.contrib import messages
 
 
-# Widok rejestracji
-class RegisterView(FormView):
-    template_name = 'users/register.html'
-    form_class = UserRegistrationForm
-    success_url = reverse_lazy('home')  # Zmień na swoją stronę główną
+# Widok rejestracji użytkownika
+class RegisterView(View):
+    def get(self, request):
+        return render(request, "users/register.html")
 
-    def form_valid(self, form):
-        user = form.save()  # Zapisz użytkownika
-        login(self.request, user)  # Zaloguj użytkownika po rejestracji
-        messages.success(self.request, "Rejestracja zakończona sukcesem!")
-        return super().form_valid(form)
+    def post(self, request):
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        password_confirm = request.POST.get('password_confirm')
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Błąd podczas rejestracji. Popraw dane.")
-        return super().form_invalid(form)
+        if password != password_confirm:
+            messages.error(request, "Hasła muszą się zgadzać.")
+            return render(request, "users/register.html")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Użytkownik o takiej nazwie już istnieje.")
+            return render(request, "users/register.html")
+
+        user = User.objects.create_user(username=username, email=email, password=password)
+        login(request, user)
+        messages.success(request, "Rejestracja zakończona sukcesem.")
+        return HttpResponseRedirect(reverse_lazy('home'))  # Zmień na odpowiedni URL
 
 
-# Widok logowania
+# Widok logowania użytkownika
 class LoginView(AuthLoginView):
-    template_name = 'users/login.html'
+    template_name = "users/login.html"
 
     def form_invalid(self, form):
         messages.error(self.request, "Błędne dane logowania.")
