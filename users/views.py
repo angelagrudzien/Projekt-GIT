@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
+from .models import CustomUser
 
 
 # Widok rejestracji użytkownika
@@ -23,11 +24,11 @@ class RegisterView(View):
             messages.error(request, "Hasła muszą się zgadzać.")
             return render(request, "users/register.html")
 
-        if User.objects.filter(username=username).exists():
+        if CustomUser.objects.filter(username=username).exists():
             messages.error(request, "Użytkownik o takiej nazwie już istnieje.")
             return render(request, "users/register.html")
 
-        user = User.objects.create_user(username=username, email=email, password=password)
+        user = CustomUser.objects.create_user(username=username, email=email, password=password)
         login(request, user)
         messages.success(request, "Rejestracja zakończona sukcesem.")
         return HttpResponseRedirect(reverse_lazy('home'))  # Zmień na odpowiedni URL
