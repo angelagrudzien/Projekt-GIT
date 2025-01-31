@@ -1,6 +1,6 @@
 from django.contrib.auth.views import LoginView as AuthLoginView
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -50,9 +50,27 @@ class RegisterView(View):
 
 
 # Widok logowania użytkownika
-class LoginView(AuthLoginView):
+class LoginView(View):
     template_name = "users/login.html"
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Błędne dane logowania.")
-        return super().form_invalid(form)
+    def get(self, request):
+        # Renderowanie formularza logowania
+        return render(request, self.template_name)
+
+    def post(self, request):
+        # Pobranie danych logowania z formularza
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Sprawdzanie, czy użytkownik istnieje
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # Jeśli dane są poprawne, logujemy użytkownika
+            login(request, user)
+            messages.success(request, "Zalogowano pomyślnie.")
+            return HttpResponseRedirect(reverse_lazy('home'))  # Zmień na odpowiedni URL strony głównej
+        else:
+            # Jeśli dane logowania są niepoprawne
+            messages.error(request, "Błędne dane logowania.")
+            return render(request, self.template_name)  # Ponowne wyświetlenie formularza logowania
