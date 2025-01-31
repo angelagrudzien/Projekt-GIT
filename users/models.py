@@ -10,6 +10,7 @@ USER_ROLES = [
     ('vip_buyer', 'Kupujący VIP'),
 ]
 
+
 class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     email = models.EmailField(unique=True)
