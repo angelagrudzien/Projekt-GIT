@@ -3,6 +3,10 @@
         "model": "users.CustomUser",
         "pk": 1,
         "fields": {
+            "email": "wj@wp.pl",
+            "username": "WojtekOne",
+            "first_name": "Wojtek",
+            "last_name": "One",
             "role": "buyer",
             "phone_number": "123123123",
             "address": "Lublin 12",
