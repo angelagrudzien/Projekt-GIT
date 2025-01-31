@@ -12,9 +12,9 @@ USER_ROLES = [
 
 
 class CustomUser(AbstractUser):
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     email = models.EmailField(unique=True)
-    username = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, unique=True)
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
     role = models.CharField(max_length=20, choices=USER_ROLES, default='buyer')
@@ -22,7 +22,7 @@ class CustomUser(AbstractUser):
     address = models.TextField(blank=True, null=True)
     vip_bonus = models.BooleanField(default=False)  # Dodatkowe korzyści dla VIP-ów
 
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'phone_number', 'address']
 
     def save(self, *args, **kwargs):
         """Automatycznie przypisuje korzyści VIP-om"""

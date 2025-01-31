@@ -17,6 +17,10 @@ class RegisterView(View):
     def post(self, request):
         username = request.POST.get('username')
         email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone_number = request.POST.get('phone_number', '')
+        address = request.POST.get('address', '')
         password = request.POST.get('password')
         password_confirm = request.POST.get('password_confirm')
 
@@ -24,11 +28,22 @@ class RegisterView(View):
             messages.error(request, "Hasła muszą się zgadzać.")
             return render(request, "users/register.html")
 
+        if CustomUser.objects.filter(password=password).exists():
+            messages.error(request, "Podane hasło już istnieje.")
+            return render(request, "users/register.html")
+
         if CustomUser.objects.filter(username=username).exists():
             messages.error(request, "Użytkownik o takiej nazwie już istnieje.")
             return render(request, "users/register.html")
 
-        user = CustomUser.objects.create_user(username=username, email=email, password=password)
+        user = CustomUser.objects.create_user(username=username,
+                                              email=email,
+                                              first_name=first_name,
+                                              last_name=last_name,
+                                              phone_number=phone_number,
+                                              address=address,
+                                              password=password
+                                              )
         login(request, user)
         messages.success(request, "Rejestracja zakończona sukcesem.")
         return HttpResponseRedirect(reverse_lazy('home'))  # Zmień na odpowiedni URL
