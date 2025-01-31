@@ -1,0 +1,12 @@
+[
+    {
+        "model": "users.CustomUser",
+        "pk": 1,
+        "fields": {
+            "role": "buyer",
+            "phone_number": "123123123",
+            "address": "Lublin 12",
+            "vip_bonus": false
+        }
+    }
+]
