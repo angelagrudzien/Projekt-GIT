@@ -10,6 +10,7 @@ USER_ROLES = [
     ('vip_buyer', 'Kupujący VIP'),
 ]
 
+
 class CustomUser(AbstractUser):
     role = models.CharField(max_length=20, choices=USER_ROLES, default='buyer')
     phone_number = models.CharField(max_length=15, blank=True, null=True)
