@@ -1,0 +1,25 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Lista produktów</h1>
+
+  <ul>
+    {% for product in products %}
+      <li>
+        {{ product.name }} - Ilość: {{ product.stock }}
+        <a href="{% url 'products:increase_stock' pk=product.pk %}">➕</a>
+        <a href="{% url 'products:decrease_stock' pk=product.pk %}">➖</a>
+
+        <!-- Przycisk usuwania -->
+        <form action="{% url 'products:product_delete' pk=product.pk %}" method="post" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć ten produkt?')">🗑️</button>
+        </form>
+
+        <form action="{%url 'products:product_delete' pk=product.pk%} method="post" style=
+      </li>
+    {% endfor %}
+  </ul>
+
+  <a href="{% url 'products:product_create' %}">Dodaj nowy produkt</a>
+{% endblock %}

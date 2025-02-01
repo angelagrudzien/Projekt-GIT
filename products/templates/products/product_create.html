@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h2>{% if form.instance.pk %}Edytuj produkt{% else %}Dodaj nowy produkt{% endif %}</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <table>
+            {{ form.as_table }}
+        </table>
+        
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %}Zapisz zmiany{% else %}Dodaj produkt{% endif %}
+        </button>
+    </form>
+
+    <br>
+    <a href="{% url 'products:product_list' %}">Powrót do listy produktów</a>
+{% endblock %}
