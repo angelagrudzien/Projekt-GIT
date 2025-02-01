@@ -62,3 +62,18 @@ def decrease_stock(request, pk):
     else:
         messages.error(request, f"Brak wystarczającej ilości {product.name} w magazynie.")
     return redirect('products:product_list')
+
+
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == "POST":
+        quantity = int(request.POST.get("quantity", 1))  
+
+        if quantity > product.stock:  
+            messages.error(request, "Nie możesz kupić więcej niż dostępne w magazynie!")
+            return redirect("products:product_detail", pk=product.id)
+
+        messages.success(request, f"Dodano {quantity} sztuk {product.name} do koszyka!")
+
+    return redirect("products:product_detail", pk=product.id)

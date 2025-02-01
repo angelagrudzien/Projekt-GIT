@@ -16,6 +16,7 @@ urlpatterns = [
     path('delete/<int:pk>/', views.product_delete, name='product_delete'),
     path('increase_stock/<int:pk>/', views.increase_stock, name='increase_stock'),
     path('decrease_stock/<int:pk>/', views.decrease_stock, name='decrease_stock'),
+    path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart')
 ]
 
 if settings.DEBUG:
