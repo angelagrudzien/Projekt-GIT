@@ -9,9 +9,16 @@
     {% for product in products %}
       <li>
         <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
+        <p>
+        <img
+            class="image"
+            src="{{ product.image.url }}"
+            alt="{{ product.name }}"
+        />
+        </p>
         <p>Cena: {{ product.price }} PLN</p>
         <p>Ilość w magazynie: {{ product.stock }}</p>
+        <a href="{% url 'products:product_detail' pk=product.pk %}">Szczegóły</a>
       </li>
     {% empty %}
       <p>Brak produktów w sklepie.</p>
