@@ -10,12 +10,20 @@
 <body>
     <h1>Strona główna</h1>
         {% if user.is_authenticated %}
+        <nav>
+        <a href ="/">Dom</a> |
+        <a href="{% url 'products:product_list_client' %}">Lista produktów</a> |
+        <a href="">koszyk</a> |
+
+        <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Wyloguj się</a>
+        </form>
+        </nav>
+
         <p>Witaj, {{ user.username }}! Zacznij zakupy już teraz. Zapoznaj się z 
             bogatą ofertą produktów poniżej.</p>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Wyloguj się</button>
-            </form>
+
     {% else %}
     <p>Jeśli chcesz robić zakupy albo coś sprzedać zaloguj się
         lub zarejestruj, jeśli nie masz jeszcze konta.</p>
