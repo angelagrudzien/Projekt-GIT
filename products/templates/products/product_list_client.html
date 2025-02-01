@@ -1,6 +1,8 @@
-{% extends 'base_generic.html' %}
+{% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
+  <link rel="stylesheet" href="{%static 'css/style.css'%}">
   <h1>Witamy w sklepie z produktami!</h1>
 
   <h2>Lista produktów</h2>
@@ -8,7 +10,7 @@
   <ul>
     {% for product in products %}
       <li>
-        <h3>{{ product.name }}</h3>
+        <a href="{% url 'products:product_detail' pk=product.pk %}"><h3>{{ product.name }}</h3></a>
         <p>
         <img
             class="image"
@@ -18,7 +20,6 @@
         </p>
         <p>Cena: {{ product.price }} PLN</p>
         <p>Ilość w magazynie: {{ product.stock }}</p>
-        <a href="{% url 'products:product_detail' pk=product.pk %}">Szczegóły</a>
       </li>
     {% empty %}
       <p>Brak produktów w sklepie.</p>

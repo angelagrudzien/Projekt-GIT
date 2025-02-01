@@ -13,7 +13,7 @@ def product_list_client(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    return render(request, 'produkty/product_detail.html', {'product': product})
+    return render(request, 'products/product_detail.html', {'product': product})
 
 
 def product_create(request):
