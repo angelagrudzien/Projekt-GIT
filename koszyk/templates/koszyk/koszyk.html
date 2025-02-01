@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
   <h1>Twój Koszyk</h1>
 
@@ -11,13 +13,6 @@
         </li>
       {% endfor %}
     </ul>
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li class="message">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
     <h3>Całkowita wartość: {{ cart.total_price }} PLN</h3>
     <form method="post" action="{% url 'koszyk:checkout' %}">
       {% csrf_token %}
