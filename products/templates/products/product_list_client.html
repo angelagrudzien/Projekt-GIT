@@ -1,0 +1,20 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h1>Witamy w sklepie z produktami!</h1>
+
+  <h2>Lista produktów</h2>
+
+  <ul>
+    {% for product in products %}
+      <li>
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p>Cena: {{ product.price }} PLN</p>
+        <p>Ilość w magazynie: {{ product.stock }}</p>
+      </li>
+    {% empty %}
+      <p>Brak produktów w sklepie.</p>
+    {% endfor %}
+  </ul>
+{% endblock %}
