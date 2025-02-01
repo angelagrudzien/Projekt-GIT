@@ -13,11 +13,13 @@
 
     <!-- Pokazywanie wiadomości o błędach -->
     {% if messages %}
-        <div>
-            {% for message in messages %}
+    <div>
+        {% for message in messages %}
+            {% if "error" in message.tags %}
                 <p>{{ message }}</p>
-            {% endfor %}
-        </div>
+            {% endif %}
+        {% endfor %}
+    </div>
     {% endif %}
 
     <!-- Formularz logowania -->
