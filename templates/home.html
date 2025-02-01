@@ -13,7 +13,8 @@
         <nav>
         <a href ="/">Strona główna</a> |
         <a href="{% url 'products:product_list_client' %}">Lista produktów</a> |
-        <a href="">Koszyk</a> |
+
+        <a href="{% url 'koszyk:cart_view' %}">Koszyk</a> |
 
         <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
             {% csrf_token %}

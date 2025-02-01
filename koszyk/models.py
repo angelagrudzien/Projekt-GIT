@@ -7,8 +7,7 @@ from products.models import Product
 
 
 class Cart(models.Model):
-       # user = "elo"
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, default=None)
 
     def total_price(self):
         """Zwraca całkowitą wartość koszyka."""

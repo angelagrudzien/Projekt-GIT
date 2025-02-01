@@ -1,10 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <h2>Twój koszyk</h2>
+
+  {% if cart.items.all %}
+    <ul>
+      {% for item in cart.items.all %}
+        <li>
+          <p>
+            <img class="image" src="{{ item.product.image.url }}" alt="{{ item.product.name }}" />
+          </p>
+          <h3>{{ item.product.name }}</h3>
+          <div class="info">
+            <p>Cena za sztukę: {{ item.product.price }} PLN</p>
+            <p>Ilość: {{ item.quantity }}</p>
+            <p>Łączna cena: {{ item.total_price }} PLN</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h3>Łączna wartość koszyka: {{ cart.total_price }} PLN</h3>
+
+    <form method="POST" action="{% url 'checkout' %}">
+      {% csrf_token %}
+      <button type="submit" class="buy-button">Kup</button>
+    </form>
+
+  {% else %}
+    <p>Twój koszyk jest pusty.</p>
+  {% endif %}
+{% endblock %}
