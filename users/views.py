@@ -7,7 +7,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import CustomUser
-
+from django.contrib.auth import logout
+from django.shortcuts import redirect
 
 # Widok rejestracji użytkownika
 class RegisterView(View):
@@ -68,9 +69,13 @@ class LoginView(View):
         if user is not None:
             # Jeśli dane są poprawne, logujemy użytkownika
             login(request, user)
-            messages.success(request, "Zalogowano pomyślnie.")
             return HttpResponseRedirect(reverse_lazy('home'))  # Zmień na odpowiedni URL strony głównej
         else:
             # Jeśli dane logowania są niepoprawne
             messages.error(request, "Błędne dane logowania.")
             return render(request, self.template_name)  # Ponowne wyświetlenie formularza logowania
+
+
+def LogoutView(request):
+    logout(request)
+    return redirect('home')
