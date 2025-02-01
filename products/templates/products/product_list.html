@@ -8,19 +8,24 @@
   <ul>
     {% for product in products %}
       <li>
-        {{ product.name }} - Ilość: {{ product.stock }}
-        <a href="{% url 'products:increase_stock' pk=product.pk %}">➕</a>
-        <a href="{% url 'products:decrease_stock' pk=product.pk %}">➖</a>
-
+        <div class="info_list">
+        {{ product.name }} - Liczba: {{ product.stock }}
+        <a href="{% url 'products:increase_stock' pk=product.pk %}">+</a>
+        <a href="{% url 'products:decrease_stock' pk=product.pk %}">-</a>
+        </div>
         <!-- Przycisk usuwania -->
-        <form action="{% url 'products:product_delete' pk=product.pk %}" method="post" style="display:inline;">
+        <form action="{% url 'products:product_delete' pk=product.pk %}" method="post" >
           {% csrf_token %}
-          <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć ten produkt?')">🗑️</button>
+          <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć ten produkt?')">
+            <span role="img" aria-label="Delete">
+            🗑️
+            </span>
+          </button>
         </form>
 
       </li>
     {% endfor %}
   </ul>
 
-  <a href="{% url 'products:product_create' %}">Dodaj nowy produkt</a>
+  <a href="{% url 'products:product_create' %}" class="powrot">Dodaj nowy produkt</a>
 {% endblock %}

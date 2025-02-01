@@ -8,10 +8,13 @@
 
 </head>
 <body>
+    <header>
+        <h1>DjangoShop</h1>
+    </header>
     <nav>
         <a href ="/">Dom</a> |
         <a href="{% url 'products:product_list_client' %}">Lista produktów</a> |
-        <a href="">koszyk</a> |
+        <a href="">Koszyk</a> |
 
         <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
             {% csrf_token %}
@@ -23,9 +26,7 @@
         {% endif %}
     </nav>
 
-    <header>
-        <h1>DjangoShop</h1>
-    </header>
+
     <main>
         {% block content %}{% endblock %}
     </main>

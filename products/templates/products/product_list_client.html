@@ -3,14 +3,12 @@
 
 {% block content %}
   <link rel="stylesheet" href="{%static 'css/style.css'%}">
-  <h1>Witamy w sklepie z produktami!</h1>
 
   <h2>Lista produktów</h2>
 
   <ul>
     {% for product in products %}
       <li>
-        <a href="{% url 'products:product_detail' pk=product.pk %}"><h3>{{ product.name }}</h3></a>
         <p>
         <img
             class="image"
@@ -18,8 +16,11 @@
             alt="{{ product.name }}"
         />
         </p>
+        <a href="{% url 'products:product_detail' pk=product.pk %}" class="name"><h3>{{ product.name }}</h3></a>
+        <div class="info">
         <p>Cena: {{ product.price }} PLN</p>
-        <p>Ilość w magazynie: {{ product.stock }}</p>
+        <p>Liczba w magazynie: {{ product.stock }}</p>
+        </div>
       </li>
     {% empty %}
       <p>Brak produktów w sklepie.</p>
