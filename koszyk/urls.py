@@ -7,5 +7,5 @@ app_name = 'koszyk'
 urlpatterns = [
     path("", cart_view, name="cart_view"),
     path("add/<int:product_id>/", add_to_cart, name="add_to_cart"),
-    path("checkout/", checkout, name="checkout"),
+    path('checkout/', checkout, name='checkout'),
 ]

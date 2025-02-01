@@ -9,6 +9,7 @@ app_name = 'products'
 
 urlpatterns = [
     path('', views.product_list_client, name='product_list_client'),
+    path('produkty/<int:product_id>/dodaj/', views.add_to_cart, name='add_to_cart'),
     path('seller', views.product_list, name='product_list'),
     path('product/<int:pk>/', views.product_detail, name='product_detail'),
     path('create/', views.product_create, name='product_create'),

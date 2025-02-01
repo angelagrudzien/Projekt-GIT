@@ -2,25 +2,23 @@
 {% load static %}
 
 {% block content %}
-  <link rel="stylesheet" href="{%static 'css/style.css'%}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <h1 class="nazwa">{{ product.name }}</h1>
   <div class="opis">
-  <img
-  class="image_detail"
-  src="{{ product.image.url }}"
-  alt="{{ product.name }}"
-  />
-  <div class="info_details">
-  <p>{{ product.description }}</p>
-  <p>Cena: {{ product.price }} PLN</p>
-  <p>Liczba w magazynie: {{ product.stock }}</p>
-  <form method="post" action="{% url 'products:add_to_cart' product.id %}">
-    {% csrf_token %}
-    <label for="quantity">Ilość:</label>
-    <input type="number" id="quantity" name="quantity" min="1" max="{{ product.stock }}" required>
-    <button type="submit">Dodaj do koszyka</button>
-  </form>
-  </div>
+    <img class="image_detail" src="{{ product.image.url }}" alt="{{ product.name }}" />
+    <div class="info_details">
+      <p>{{ product.description }}</p>
+      <p>Cena: {{ product.price }} PLN</p>
+      <p>Liczba w magazynie: {{ product.stock }}</p>
+
+      <!-- Formularz dodawania do koszyka -->
+      <form method="post" action="{% url 'koszyk:add_to_cart' product.id %}">
+        {% csrf_token %}
+        <label for="quantity">Ilość:</label>
+        <input type="number" id="quantity" name="quantity" min="1" max="{{ product.stock }}" required>
+        <button type="submit">Dodaj do koszyka</button>
+      </form>
+    </div>
   </div>
   <a href="{% url 'products:product_list_client' %}" class="powrot">Powrót do listy produktów</a>
 {% endblock %}
