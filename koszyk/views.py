@@ -16,24 +16,33 @@ def cart_view(request):
 
 
 
+from django.contrib import messages
+from django.shortcuts import redirect
+
 def add_to_cart(request, product_id):
     """Dodaje produkt do koszyka"""
-    product = get_object_or_404(Product, id=product_id)  # Znajdź produkt po id
+    product = get_object_or_404(Product, id=product_id)
 
     # Sprawdź, czy użytkownik ma już koszyk
     cart, created = Cart.objects.get_or_create(user=request.user)
 
-    # Jeśli produkt już znajduje się w koszyku, dodaj 1 do ilości, w przeciwnym razie utwórz nowy wpis w koszyku
+    # Odczytaj ilość produktu z formularza
+    quantity = int(request.POST.get('quantity', 1))  # domyślnie 1, jeśli nie podano
+
+    # Sprawdzamy, czy produkt już jest w koszyku
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
     if not created:
         # Jeśli produkt już jest w koszyku, zwiększ ilość
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
 
     cart_item.save()  # Zapisz zmiany w bazie danych
 
-    return JsonResponse({"message": "Produkt dodany do koszyka"})  # Można dodać odpowiedź w formacie JSON, jeśli używasz AJAX
+    # Dodaj komunikat do wiadomości
+    messages.success(request, f'Produkt "{product.name}" został dodany do koszyka.')
 
+    # Zwróć użytkownika na stronę produktu (czyli nie przekierowujemy do koszyka)
+    return render(request, 'products/product_detail.html', {'product': product})
 
 def checkout(request):
     """Finalizuje zakup: zmniejsza stan magazynowy i czyści koszyk."""

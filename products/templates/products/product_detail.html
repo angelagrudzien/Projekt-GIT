@@ -11,6 +11,15 @@
       <p>Cena: {{ product.price }} PLN</p>
       <p>Liczba w magazynie: {{ product.stock }}</p>
 
+      <!-- Wyświetlanie komunikatów -->
+      {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+            <div class="message">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
       <!-- Formularz dodawania do koszyka -->
       <form method="post" action="{% url 'koszyk:add_to_cart' product.id %}">
         {% csrf_token %}
@@ -20,5 +29,6 @@
       </form>
     </div>
   </div>
+
   <a href="{% url 'products:product_list_client' %}" class="powrot">Powrót do listy produktów</a>
 {% endblock %}

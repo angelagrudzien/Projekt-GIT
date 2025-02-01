@@ -38,16 +38,23 @@ class CartItem(models.Model):
 
 
 def add_to_cart(request, product_id):
-    """Dodaje produkt do koszyka."""
+    """Dodaje produkt do koszyka"""
     product = get_object_or_404(Product, id=product_id)
+
+    # Sprawdź, czy użytkownik ma już koszyk
     cart, created = Cart.objects.get_or_create(user=request.user)
+
+    # Jeśli produkt już znajduje się w koszyku, dodaj 1 do ilości, w przeciwnym razie utwórz nowy wpis w koszyku
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
     if not created:
+        # Jeśli produkt już jest w koszyku, zwiększ ilość
         cart_item.quantity += 1
-    cart_item.save()
 
-    return JsonResponse({"message": "Produkt dodany do koszyka"})
+    cart_item.save()  # Zapisz zmiany w bazie danych
+
+    # Zwróć komunikat jako odpowiedź JSON
+    return JsonResponse({"message": "Produkt został dodany do koszyka!"})
 
 
 def checkout(request):
