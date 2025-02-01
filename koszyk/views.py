@@ -8,7 +8,7 @@ from .models import Cart, CartItem
 def cart_view(request):
     """Wyświetla zawartość koszyka."""
     cart, created = Cart.objects.get_or_create(user=request.user)
-    return render(request, "koszyk.html", {"cart": cart})
+    return render(request, "koszyk/koszyk.html", {"cart": cart})
 
 
 def add_to_cart(request, product_id):
