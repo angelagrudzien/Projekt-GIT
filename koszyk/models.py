@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.conf import settings
 from products.models import Product
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
 
 class Cart(models.Model):
        # user = "elo"
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
 
     def total_price(self):
         """Zwraca całkowitą wartość koszyka."""
@@ -34,9 +35,6 @@ class CartItem(models.Model):
     def __str__(self):
         return f"{self.quantity}x {self.product.name}"
 
-
-from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
 
 
 def add_to_cart(request, product_id):
