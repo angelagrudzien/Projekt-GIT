@@ -26,7 +26,7 @@
 
         <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
             {% csrf_token %}
-            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Wyloguj się</a> 
+            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Wyloguj się</a>  |
         </form>
 
         {% if user.is_authenticated and user.role == "seller" %}
