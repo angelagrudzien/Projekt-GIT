@@ -16,30 +16,23 @@ def cart_view(request):
 
 
 def add_to_cart(request, product_id):
-    """Dodaje produkt do koszyka z poprawnym pobieraniem ilości"""
+    """Dodaje produkt do koszyka z uwzględnieniem dostępności w magazynie"""
     product = get_object_or_404(Product, id=product_id)
-
     cart, created = Cart.objects.get_or_create(user=request.user)
 
     try:
-        quantity = int(request.POST.get("quantity", 1))  
+        quantity = int(request.POST.get("quantity", 1))
     except ValueError:
         return redirect("products:product_detail", product_id=product.id)
-    cart, _ = Cart.objects.get_or_create(user=request.user)
-
 
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-
     if created:
-        cart_item.quantity = quantity 
+        cart_item.quantity = min(quantity, product.stock)  # Nie dodajemy więcej niż jest w magazynie
     else:
-        cart_item.quantity += quantity
+        cart_item.quantity = min(cart_item.quantity + quantity, product.stock)
 
     cart_item.save()
-
-
-
     return redirect("koszyk:cart_view")
 
 
@@ -49,15 +42,13 @@ def checkout(request):
 
     for item in cart.items.all():
         if item.quantity > item.product.stock:
- 
-            return redirect("koszyk:cart_view")
+            item.quantity = item.product.stock  # Ustaw ilość na maksymalną dostępną
+            item.save()
 
+    # Aktualizacja stanu magazynowego i opróżnienie koszyka
     for item in cart.items.all():
         item.product.stock -= item.quantity
         item.product.save()
 
     cart.items.all().delete()
-
-
-    
     return redirect("home")

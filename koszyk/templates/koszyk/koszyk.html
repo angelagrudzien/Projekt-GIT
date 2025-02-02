@@ -9,11 +9,14 @@
       {% for item in cart.items.all %}
         <li>
           <div style="color: black; font-size:20px">
-          {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} PLN
-            <strong>  Razem: {{ item.total_price }} PLN</strong>
+            {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} PLN
+            <strong>Razem: {{ item.total_price }} PLN</strong>
+            {% if item.quantity > item.product.stock %}
+              <p style="color: red;">Dostępna tylko {{ item.product.stock }} szt.</p>
+            {% endif %}
           </div>
         </li>
-      {% endfor %}
+    {% endfor %}
     </ul>
     <h2>Całkowita wartość: {{ cart.total_price }} PLN</h2>
     <form method="post" action="{% url 'koszyk:checkout' %}">
