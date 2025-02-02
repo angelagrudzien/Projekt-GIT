@@ -2,18 +2,20 @@
 {% load static %}
 
 {% block content %}
-  <h1>Twój Koszyk</h1>
+  <h2>Twój Koszyk</h2>
 
   {% if cart %}
     <ul>
       {% for item in cart.items.all %}
         <li>
+          <div style="color: black; font-size:20px">
           {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} PLN
-          <strong>Razem: {{ item.total_price }} PLN</strong>
+            <strong>  Razem: {{ item.total_price }} PLN</strong>
+          </div>
         </li>
       {% endfor %}
     </ul>
-    <h3>Całkowita wartość: {{ cart.total_price }} PLN</h3>
+    <h2>Całkowita wartość: {{ cart.total_price }} PLN</h2>
     <form method="post" action="{% url 'koszyk:checkout' %}">
       {% csrf_token %}
       <button type="submit">Zakończ zakupy</button>

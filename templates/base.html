@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="pl">
+{% load static %}
 {% if user.is_authenticated %}
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Moja Strona{% endblock %}</title>
-
+    <link rel="stylesheet" href="{%static 'css/style.css'%}">
 
 </head>
 <body>
@@ -25,14 +26,13 @@
 
         <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: inline;">
             {% csrf_token %}
-            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Wyloguj się</a> |
+            <a href="#" onclick="document.getElementById('logout-form').submit(); return false;">Wyloguj się</a> 
         </form>
 
         {% if user.is_authenticated and user.role == "seller" %}
         <a href="{% url 'products:product_list' %}">Lista produktów dla sprzedawcy</a> |
         {% endif %}
     </nav>
-
 
     <main>
         {% block content %}{% endblock %}

@@ -133,7 +133,8 @@ button {
     cursor: pointer;
 }
 
-/* Opcjonalnie: efekt po najechaniu */
+
 button:hover {
     opacity: .85;
 }
+

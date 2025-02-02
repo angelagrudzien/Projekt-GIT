@@ -2,9 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from products.models import Product
-
 from .models import Product, Cart, CartItem
-
+from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import Cart
 
@@ -16,40 +15,49 @@ def cart_view(request):
 
 
 
-from django.contrib import messages
-from django.shortcuts import redirect
-
 def add_to_cart(request, product_id):
-    """Dodaje produkt do koszyka"""
+    """Dodaje produkt do koszyka z poprawnym pobieraniem ilości"""
     product = get_object_or_404(Product, id=product_id)
 
-    # Sprawdź, czy użytkownik ma już koszyk
     cart, created = Cart.objects.get_or_create(user=request.user)
 
-    # Odczytaj ilość produktu z formularza
-    quantity = int(request.POST.get('quantity', 1))  # domyślnie 1, jeśli nie podano
+    try:
+        quantity = int(request.POST.get("quantity", 1))  
+    except ValueError:
+        return redirect("products:product_detail", product_id=product.id)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
-    # Sprawdzamy, czy produkt już jest w koszyku
+
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
 
-    if not created:
-        # Jeśli produkt już jest w koszyku, zwiększ ilość
+
+    if created:
+        cart_item.quantity = quantity 
+    else:
         cart_item.quantity += quantity
 
-    cart_item.save()  # Zapisz zmiany w bazie danych
+    cart_item.save()
 
-    # Dodaj komunikat do wiadomości
-    messages.success(request, f'Produkt "{product.name}" został dodany do koszyka.')
 
-    # Zwróć użytkownika na stronę produktu (czyli nie przekierowujemy do koszyka)
-    return render(request, 'products/product_detail.html', {'product': product})
+
+    return redirect("koszyk:cart_view")
+
 
 def checkout(request):
-    """Finalizuje zakup: zmniejsza stan magazynowy i czyści koszyk."""
+    """Finalizuje zakup: zmniejsza stan magazynowy i czyści koszyk"""
     cart = get_object_or_404(Cart, user=request.user)
-    for item in cart.items.all():
-        if not item.product.decrease_stock(item.quantity):
-            return JsonResponse({"error": f"Brak wystarczającej ilości {item.product.name}"}, status=400)
 
-    cart.clear_cart()
-    return JsonResponse({"message": "Zakup zakończony sukcesem"})
+    for item in cart.items.all():
+        if item.quantity > item.product.stock:
+ 
+            return redirect("koszyk:cart_view")
+
+    for item in cart.items.all():
+        item.product.stock -= item.quantity
+        item.product.save()
+
+    cart.items.all().delete()
+
+
+    
+    return redirect("home")

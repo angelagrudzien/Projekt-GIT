@@ -21,7 +21,6 @@ def product_create(request):
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, "Produkt został dodany.")
             return redirect('products:product_list')
     else:
         form = ProductForm()
@@ -33,7 +32,6 @@ def product_edit(request, pk):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            messages.success(request, "Produkt został zaktualizowany.")
             return redirect('products:product_list')
     else:
         form = ProductForm(instance=product)
@@ -42,7 +40,6 @@ def product_edit(request, pk):
 def product_delete(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.delete()
-    messages.success(request, "Produkt został usunięty.")
     return redirect('products:product_list')
 
 
@@ -51,16 +48,12 @@ def increase_stock(request, pk):
     """Zwiększa ilość danego produktu w magazynie."""
     product = get_object_or_404(Product, pk=pk)
     product.increase_stock(1)
-    messages.success(request, f"Dodano 1 sztukę produktu {product.name}.")
+
     return redirect('products:product_list')
 
 def decrease_stock(request, pk):
     """Zmniejsza ilość danego produktu w magazynie, jeśli to możliwe."""
     product = get_object_or_404(Product, pk=pk)
-    if product.decrease_stock(1):
-        messages.success(request, f"Zredukowano 1 sztukę produktu {product.name}.")
-    else:
-        messages.error(request, f"Brak wystarczającej ilości {product.name} w magazynie.")
     return redirect('products:product_list')
 
 
@@ -71,9 +64,6 @@ def add_to_cart(request, product_id):
         quantity = int(request.POST.get("quantity", 1))  
 
         if quantity > product.stock:  
-            messages.error(request, "Nie możesz kupić więcej niż dostępne w magazynie!")
             return redirect("products:product_detail", pk=product.id)
-
-        messages.success(request, f"Dodano {quantity} sztuk {product.name} do koszyka!")
 
     return redirect("products:product_detail", pk=product.id)

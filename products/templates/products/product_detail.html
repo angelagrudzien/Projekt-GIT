@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <h1 class="nazwa">{{ product.name }}</h1>
   <div class="opis">
     <img class="image_detail" src="{{ product.image.url }}" alt="{{ product.name }}" />

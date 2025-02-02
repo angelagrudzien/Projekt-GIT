@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-    <link rel="stylesheet" href="{%static 'css/style.css'%}">
     <h2>{% if form.instance.pk %}Edytuj produkt{% else %}Dodaj nowy produkt{% endif %}</h2>
 
     <form method="post" enctype="multipart/form-data">

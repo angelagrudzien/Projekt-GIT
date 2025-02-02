@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-  <link rel="stylesheet" href="{%static 'css/style.css'%}">
 
   <h2>Lista produktów</h2>
 
@@ -16,7 +15,7 @@
             alt="{{ product.name }}"
         />
         </p>
-        <a href="{% url 'products:product_detail' pk=product.pk %}" class="name"><h3>{{ product.name }}</h3></a>
+        <a href="{% url 'products:product_detail' pk=product.pk %}" class="name"><h2>{{ product.name }}</h2></a>
         <div class="info">
         <p>Cena: {{ product.price }} PLN</p>
         <p>Liczba w magazynie: {{ product.stock }}</p>
