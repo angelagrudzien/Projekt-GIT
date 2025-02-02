@@ -52,6 +52,9 @@ def checkout(request):
             item.quantity = item.product.stock  # Ustaw ilość na maksymalną dostępną
             item.save()
 
+    order = Order.objects.create(user=request.user)
+
+
     # Aktualizacja stanu magazynowego i opróżnienie koszyka
     for item in cart.items.all():
         OrderItem.objects.create(
